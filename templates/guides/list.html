@@ -1,0 +1,45 @@
+{% extends 'base/base.html' %}
+{% block title %}Guides{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h1 class="section-title">Practical Guides</h1>
+        </div>
+        {% if categories %}
+        <div class="filter-pills">
+            <a href="{% url 'guide_list' %}" class="pill {% if not current_category %}active{% endif %}">All</a>
+            {% for cat in categories %}
+            <a href="?category={{ cat.slug }}" class="pill {% if current_category == cat.slug %}active{% endif %}">{{ cat.name }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if featured and not current_category %}
+        <a href="{{ featured.get_absolute_url }}" class="featured-guide">
+            <span class="featured-badge">★ FEATURED</span>
+            <h2 class="featured-guide-title">{{ featured.title }}</h2>
+            <p class="featured-guide-excerpt">{{ featured.excerpt }}</p>
+            <span class="featured-guide-meta">{{ featured.reading_time }} min read · {{ featured.read_count }} reads</span>
+        </a>
+        {% endif %}
+
+        {% for guide in guides %}
+        <a href="{{ guide.get_absolute_url }}" class="guide-row">
+            <div>
+                {% if guide.category %}<span class="guide-tag">{{ guide.category.name|upper }}</span>{% endif %}
+                <h3 class="guide-row-title">{{ guide.title }}</h3>
+                <p class="guide-row-excerpt">{{ guide.excerpt|truncatewords:25 }}</p>
+            </div>
+            <div class="guide-row-right">
+                <span class="guide-reads">{{ guide.read_count }} reads</span>
+                <span class="guide-time">{{ guide.reading_time }} min</span>
+            </div>
+        </a>
+        {% empty %}
+        <p class="empty-state">No guides published yet. Check back soon.</p>
+        {% endfor %}
+        {% include 'base/pagination.html' %}
+    </div>
+</section>
+{% endblock %}

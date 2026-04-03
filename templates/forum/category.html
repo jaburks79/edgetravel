@@ -1,0 +1,35 @@
+{% extends 'base/base.html' %}
+{% block title %}{{ category.name }} — Community{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        <a href="{% url 'forum_home' %}" class="back-link">← Community</a>
+        <div class="section-header">
+            <div>
+                <h1 class="section-title">{{ category.icon }} {{ category.name }}</h1>
+                {% if category.description %}<p class="section-subtitle">{{ category.description }}</p>{% endif %}
+            </div>
+            <a href="{% url 'forum_create_post' %}" class="btn btn-primary">+ New Discussion</a>
+        </div>
+        {% for post in posts %}
+        <a href="{{ post.get_absolute_url }}" class="forum-row">
+            <div class="forum-row-left">
+                {% if post.is_pinned %}<span class="pin-badge">📌</span>{% endif %}
+                {% if post.is_hot %}<span class="hot-badge">HOT</span>{% endif %}
+                <div>
+                    <div class="forum-row-title">{{ post.title }}</div>
+                    <span class="forum-row-cat">@{{ post.display_author }} · {{ post.created_at|timesince }} ago</span>
+                </div>
+            </div>
+            <div class="forum-row-right-stats">
+                <span class="forum-row-replies">{{ post.reply_count }} 💬</span>
+                <span class="forum-row-views">{{ post.view_count }} views</span>
+            </div>
+        </a>
+        {% empty %}
+        <p class="empty-state">No discussions in this category yet. <a href="{% url 'forum_create_post' %}">Start one!</a></p>
+        {% endfor %}
+        {% include 'base/pagination.html' %}
+    </div>
+</section>
+{% endblock %}

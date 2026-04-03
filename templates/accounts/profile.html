@@ -1,0 +1,52 @@
+{% extends 'base/base.html' %}
+{% block title %}{{ profile_user.username }}{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container container-narrow">
+        <div class="profile-header">
+            <div class="profile-info">
+                <h1 class="profile-username">{{ profile_user.username }}</h1>
+                {% if profile_user.is_verified_traveler %}<span class="verified-badge">✓ Verified Traveler</span>{% endif %}
+                {% if profile_user.location %}<span class="profile-location">📍 {{ profile_user.location }}</span>{% endif %}
+                <span class="profile-stat">{{ profile_user.countries_visited }} countries visited</span>
+                <span class="profile-stat">Reputation: {{ profile_user.reputation }}</span>
+            </div>
+            {% if user == profile_user %}
+            <a href="{% url 'edit_profile' %}" class="btn btn-ghost">Edit Profile</a>
+            {% endif %}
+        </div>
+        {% if profile_user.bio %}<p class="profile-bio">{{ profile_user.bio }}</p>{% endif %}
+
+        {% if user_reports %}
+        <h2 class="subsection-title">Trip Reports</h2>
+        {% for report in user_reports %}
+        <a href="{{ report.get_absolute_url }}" class="report-row">
+            <div class="report-row-main">
+                <h3 class="report-row-title">{{ report.title }}</h3>
+                <div class="report-row-meta">
+                    <span class="report-dest">{{ report.destination.name }}</span>
+                    <span class="report-date">{{ report.created_at|date:"M j, Y" }}</span>
+                </div>
+            </div>
+            <div class="stat"><div class="stat-value">▲ {{ report.upvotes }}</div></div>
+        </a>
+        {% endfor %}
+        {% endif %}
+
+        {% if user_posts %}
+        <h2 class="subsection-title">Forum Posts</h2>
+        {% for post in user_posts %}
+        <a href="{{ post.get_absolute_url }}" class="forum-row">
+            <div class="forum-row-left">
+                <div>
+                    <div class="forum-row-title">{{ post.title }}</div>
+                    <span class="forum-row-cat">{{ post.category.name }}</span>
+                </div>
+            </div>
+            <span class="forum-row-replies">{{ post.reply_count }} 💬</span>
+        </a>
+        {% endfor %}
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends 'base/base.html' %}
+{% block title %}{{ destination.name }}{% endblock %}
+{% block meta_description %}{{ destination.summary }}{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="dest-detail-header">
+            <div>
+                <a href="{% url 'destination_list' %}" class="back-link">← All Destinations</a>
+                <h1 class="dest-detail-title">{{ destination.emoji_icon }} {{ destination.name }}</h1>
+                <div class="dest-detail-meta">
+                    <span class="risk-badge risk-{{ destination.risk_level }}">{{ destination.get_risk_level_display|upper }} RISK</span>
+                    <span class="dest-region">{{ destination.get_region_display }}</span>
+                    {% if destination.last_verified %}
+                    <span class="dest-verified">Last verified: {{ destination.last_verified|date:"M Y" }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="dest-detail-grid">
+            <div class="dest-detail-main">
+                <div class="content-block">
+                    <h2>Overview</h2>
+                    <div class="prose">{{ destination.overview|linebreaks }}</div>
+                </div>
+
+                <div class="content-block content-block-warning">
+                    <h2>⚠ Safety Brief</h2>
+                    <div class="prose">{{ destination.safety_brief|linebreaks }}</div>
+                </div>
+
+                {% if destination.visa_info %}
+                <div class="content-block">
+                    <h2>Visa & Entry</h2>
+                    <div class="prose">{{ destination.visa_info|linebreaks }}</div>
+                </div>
+                {% endif %}
+
+                {% if destination.transport_info %}
+                <div class="content-block">
+                    <h2>Getting There & Around</h2>
+                    <div class="prose">{{ destination.transport_info|linebreaks }}</div>
+                </div>
+                {% endif %}
+
+                {% if destination.money_info %}
+                <div class="content-block">
+                    <h2>Money & Costs</h2>
+                    <div class="prose">{{ destination.money_info|linebreaks }}</div>
+                </div>
+                {% endif %}
+
+                {% if destination.connectivity_info %}
+                <div class="content-block">
+                    <h2>Connectivity</h2>
+                    <div class="prose">{{ destination.connectivity_info|linebreaks }}</div>
+                </div>
+                {% endif %}
+
+                {% if destination.tips %}
+                <div class="content-block">
+                    <h2>Tips & Advice</h2>
+                    <div class="prose">{{ destination.tips|linebreaks }}</div>
+                </div>
+                {% endif %}
+            </div>
+
+            <aside class="dest-detail-sidebar">
+                <div class="sidebar-card">
+                    <h3>Risk Level</h3>
+                    <div class="risk-display">
+                        <div class="risk-dots risk-dots-large">
+                            {% for i in "12345" %}
+                            <span class="risk-dot risk-dot-lg {% if forloop.counter <= destination.risk_level %}risk-dot-active risk-dot-{{ destination.risk_level }}{% endif %}"></span>
+                            {% endfor %}
+                        </div>
+                        <span class="risk-label" style="color:{{ destination.risk_color }}">{{ destination.get_risk_level_display }}</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-card">
+                    <h3>Trip Reports ({{ trip_reports|length }})</h3>
+                    {% if trip_reports %}
+                        {% for report in trip_reports %}
+                        <a href="{{ report.get_absolute_url }}" class="sidebar-report">
+                            <div class="sidebar-report-title">{{ report.title|truncatewords:10 }}</div>
+                            <div class="sidebar-report-meta">▲ {{ report.upvotes }} · {{ report.display_author }}</div>
+                        </a>
+                        {% endfor %}
+                    {% else %}
+                        <p class="sidebar-empty">No trip reports yet. Be the first!</p>
+                    {% endif %}
+                    <a href="{% url 'submit_report' %}" class="btn btn-primary btn-block">Submit a Report</a>
+                </div>
+            </aside>
+        </div>
+    </div>
+</section>
+{% endblock %}

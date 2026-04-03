@@ -1,0 +1,132 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}EdgeTravel{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-tag">BEYOND THE ADVISORIES</div>
+            <h1 class="hero-title">Real intel for places<br>the guidebooks won't touch.</h1>
+            <p class="hero-subtitle">Trip reports, safety guides, and a community of travelers who go where others won't. No hype. No judgment. Just the information you need.</p>
+            <div class="hero-actions">
+                <a href="{% url 'destination_list' %}" class="btn btn-white">Explore Destinations</a>
+                <a href="{% url 'submit_report' %}" class="btn btn-outline">Submit a Trip Report</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if featured_destinations %}
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">High-Risk Destinations</h2>
+            <a href="{% url 'destination_list' %}" class="section-link">View all →</a>
+        </div>
+        <div class="card-grid">
+            {% for dest in featured_destinations %}
+            <a href="{{ dest.get_absolute_url }}" class="dest-card">
+                <div class="dest-card-top">
+                    <div class="dest-card-info">
+                        <span class="dest-emoji">{{ dest.emoji_icon }}</span>
+                        <div>
+                            <div class="dest-name">{{ dest.name }}</div>
+                            <div class="dest-region">{{ dest.get_region_display }}</div>
+                        </div>
+                    </div>
+                    <span class="risk-badge risk-{{ dest.risk_level }}">{{ dest.get_risk_level_display|upper }}</span>
+                </div>
+                <p class="dest-summary">{{ dest.summary }}</p>
+                <div class="dest-card-footer">
+                    <div class="risk-dots">
+                        {% for i in "12345" %}
+                        <span class="risk-dot {% if forloop.counter <= dest.risk_level %}risk-dot-active risk-dot-{{ dest.risk_level }}{% endif %}"></span>
+                        {% endfor %}
+                    </div>
+                    <span class="dest-reports">{{ dest.report_count }} reports →</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% if latest_reports %}
+<section class="section section-dark">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Latest Trip Reports</h2>
+            <a href="{% url 'report_list' %}" class="section-link">View all →</a>
+        </div>
+        {% for report in latest_reports %}
+        <a href="{{ report.get_absolute_url }}" class="report-row">
+            <div class="report-row-main">
+                <h3 class="report-row-title">{{ report.title }}</h3>
+                <div class="report-row-meta">
+                    <span class="report-author">@{{ report.display_author }}</span>
+                    <span class="report-dest">{{ report.destination.name }}</span>
+                    {% if report.trip_duration %}<span class="report-days">{{ report.trip_duration }} days</span>{% endif %}
+                </div>
+            </div>
+            <div class="report-row-stats">
+                <div class="stat">
+                    <div class="stat-value">▲ {{ report.upvotes }}</div>
+                    <div class="stat-label">upvotes</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value">{{ report.comment_count }}</div>
+                    <div class="stat-label">replies</div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if latest_guides %}
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Practical Guides</h2>
+            <a href="{% url 'guide_list' %}" class="section-link">View all →</a>
+        </div>
+        {% for guide in latest_guides %}
+        <a href="{{ guide.get_absolute_url }}" class="guide-row">
+            <div>
+                {% if guide.category %}<span class="guide-tag">{{ guide.category.name|upper }}</span>{% endif %}
+                <h3 class="guide-row-title">{{ guide.title }}</h3>
+            </div>
+            <span class="guide-reads">{{ guide.read_count|default:"0" }} reads</span>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if hot_discussions %}
+<section class="section section-dark">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Community Discussions</h2>
+            <a href="{% url 'forum_home' %}" class="section-link">View all →</a>
+        </div>
+        {% for post in hot_discussions %}
+        <a href="{{ post.get_absolute_url }}" class="forum-row">
+            <div class="forum-row-left">
+                {% if post.is_hot %}<span class="hot-badge">HOT</span>{% endif %}
+                <div>
+                    <div class="forum-row-title">{{ post.title }}</div>
+                    <span class="forum-row-cat">{{ post.category.name }}</span>
+                </div>
+            </div>
+            <span class="forum-row-replies">{{ post.reply_count }} 💬</span>
+        </a>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+{% endblock %}

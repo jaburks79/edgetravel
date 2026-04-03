@@ -1,0 +1,54 @@
+{% extends 'base/base.html' %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container container-narrow">
+        <a href="{% url 'forum_category' slug=post.category.slug %}" class="back-link">← {{ post.category.name }}</a>
+        <article class="forum-detail">
+            <header>
+                {% if post.is_pinned %}<span class="pin-badge">📌 Pinned</span>{% endif %}
+                <h1 class="forum-detail-title">{{ post.title }}</h1>
+                <div class="forum-detail-meta">
+                    <span class="report-author">@{{ post.display_author }}</span>
+                    <span>{{ post.created_at|timesince }} ago</span>
+                    <span>{{ post.view_count }} views</span>
+                </div>
+            </header>
+            <div class="forum-detail-body prose">{{ post.body|linebreaks }}</div>
+        </article>
+
+        <section class="comments-section">
+            <h2 class="comments-title">{{ replies|length }} Replies</h2>
+
+            {% if not post.is_locked %}
+                {% if user.is_authenticated %}
+                <form method="post" action="{% url 'forum_add_reply' slug=post.slug %}" class="comment-form">
+                    {% csrf_token %}
+                    {{ reply_form.body }}
+                    <div class="comment-form-footer">
+                        <label class="anon-toggle"><input type="checkbox" name="post_anonymously"> Post anonymously</label>
+                        <button type="submit" class="btn btn-primary">Post Reply</button>
+                    </div>
+                </form>
+                {% else %}
+                <p class="login-prompt"><a href="{% url 'login' %}">Log in</a> to reply.</p>
+                {% endif %}
+            {% else %}
+                <p class="locked-notice">🔒 This discussion is locked.</p>
+            {% endif %}
+
+            {% for reply in replies %}
+            <div class="comment">
+                <div class="comment-header">
+                    <span class="comment-author">@{{ reply.display_author }}</span>
+                    <span class="comment-date">{{ reply.created_at|timesince }} ago</span>
+                </div>
+                <div class="comment-body">{{ reply.body|linebreaks }}</div>
+            </div>
+            {% empty %}
+            <p class="empty-state">No replies yet. Be the first to respond.</p>
+            {% endfor %}
+        </section>
+    </div>
+</section>
+{% endblock %}

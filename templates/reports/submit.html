@@ -1,0 +1,28 @@
+{% extends 'base/base.html' %}
+{% block title %}Submit Trip Report{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container container-narrow">
+        <h1 class="section-title">Submit a Trip Report</h1>
+        <p class="section-subtitle">Share your experience to help other travelers. Reports are reviewed before publishing to ensure quality and accuracy.</p>
+        <form method="post" class="edge-form">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label class="form-label" for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                    {% if field.field.required %}<span class="required">*</span>{% endif %}
+                </label>
+                {{ field }}
+                {% if field.help_text %}<p class="form-help">{{ field.help_text }}</p>{% endif %}
+                {% for error in field.errors %}<p class="form-error">{{ error }}</p>{% endfor %}
+            </div>
+            {% endfor %}
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-lg">Submit for Review</button>
+                <a href="{% url 'report_list' %}" class="btn btn-ghost">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

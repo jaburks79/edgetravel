@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}EdgeTravel{% endblock %} — Real Intel for High-Risk Destinations</title>
+    <meta name="description" content="{% block meta_description %}Trip reports, safety guides, and a community for travelers who go where others won't.{% endblock %}">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="{% url 'home' %}" class="logo">
+                <span class="logo-icon">⚠</span>
+                <span class="logo-text">EDGE<span class="logo-accent">TRAVEL</span></span>
+            </a>
+            <nav class="main-nav">
+                <a href="{% url 'destination_list' %}" class="nav-link {% if request.resolver_match.url_name == 'destination_list' %}active{% endif %}">Destinations</a>
+                <a href="{% url 'report_list' %}" class="nav-link {% if 'report' in request.resolver_match.url_name %}active{% endif %}">Trip Reports</a>
+                <a href="{% url 'guide_list' %}" class="nav-link {% if 'guide' in request.resolver_match.url_name %}active{% endif %}">Guides</a>
+                <a href="{% url 'forum_home' %}" class="nav-link {% if 'forum' in request.resolver_match.url_name %}active{% endif %}">Community</a>
+            </nav>
+            <div class="header-actions">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' username=user.username %}" class="btn btn-ghost">{{ user.username }}</a>
+                    <a href="{% url 'logout' %}" class="btn btn-ghost">Log Out</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn btn-ghost">Log In</a>
+                    <a href="{% url 'register' %}" class="btn btn-primary">Join Free</a>
+                {% endif %}
+            </div>
+            <button class="mobile-menu-btn" onclick="document.querySelector('.main-nav').classList.toggle('open')">☰</button>
+        </div>
+    </header>
+
+    {% if messages %}
+    <div class="container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <main class="site-main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <div class="footer-left">
+                <span class="footer-brand">EDGE<span class="logo-accent">TRAVEL</span></span>
+                <p class="footer-disclaimer">Information is crowd-sourced and should not replace professional security advice. Always check your government's travel advisories.</p>
+            </div>
+            <div class="footer-links">
+                <a href="{% url 'destination_list' %}">Destinations</a>
+                <a href="{% url 'report_list' %}">Trip Reports</a>
+                <a href="{% url 'guide_list' %}">Guides</a>
+                <a href="{% url 'forum_home' %}">Community</a>
+            </div>
+        </div>
+        <div class="container footer-bottom">
+            <span>© 2026 EdgeTravel. All rights reserved.</span>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

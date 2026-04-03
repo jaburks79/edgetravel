@@ -1,0 +1,58 @@
+{% extends 'base/base.html' %}
+{% block title %}Destinations{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h1 class="section-title">High-Risk Destinations</h1>
+        </div>
+        <div class="filter-bar">
+            <form method="get" class="filter-form">
+                <input type="text" name="q" value="{{ search_query }}" placeholder="Search destinations..." class="form-input filter-search">
+                <select name="region" class="form-input filter-select" onchange="this.form.submit()">
+                    <option value="">All Regions</option>
+                    {% for val, label in regions %}
+                    <option value="{{ val }}" {% if current_region == val %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                <select name="risk" class="form-input filter-select" onchange="this.form.submit()">
+                    <option value="">All Risk Levels</option>
+                    {% for val, label in risk_levels %}
+                    <option value="{{ val }}" {% if current_risk == val|stringformat:"d" %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+        {% if destinations %}
+        <div class="card-grid">
+            {% for dest in destinations %}
+            <a href="{{ dest.get_absolute_url }}" class="dest-card">
+                <div class="dest-card-top">
+                    <div class="dest-card-info">
+                        <span class="dest-emoji">{{ dest.emoji_icon }}</span>
+                        <div>
+                            <div class="dest-name">{{ dest.name }}</div>
+                            <div class="dest-region">{{ dest.get_region_display }}</div>
+                        </div>
+                    </div>
+                    <span class="risk-badge risk-{{ dest.risk_level }}">{{ dest.get_risk_level_display|upper }}</span>
+                </div>
+                <p class="dest-summary">{{ dest.summary }}</p>
+                <div class="dest-card-footer">
+                    <div class="risk-dots">
+                        {% for i in "12345" %}
+                        <span class="risk-dot {% if forloop.counter <= dest.risk_level %}risk-dot-active risk-dot-{{ dest.risk_level }}{% endif %}"></span>
+                        {% endfor %}
+                    </div>
+                    <span class="dest-reports">{{ dest.report_count }} reports →</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% include 'base/pagination.html' %}
+        {% else %}
+        <p class="empty-state">No destinations found matching your filters.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

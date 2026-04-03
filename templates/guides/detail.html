@@ -1,0 +1,44 @@
+{% extends 'base/base.html' %}
+{% block title %}{{ guide.title }}{% endblock %}
+{% block meta_description %}{{ guide.meta_description|default:guide.excerpt }}{% endblock %}
+{% block content %}
+<article class="section">
+    <div class="container container-narrow">
+        <a href="{% url 'guide_list' %}" class="back-link">← All Guides</a>
+        <header class="guide-detail-header">
+            {% if guide.category %}<span class="guide-tag">{{ guide.category.name|upper }}</span>{% endif %}
+            <h1 class="guide-detail-title">{{ guide.title }}</h1>
+            <div class="guide-detail-meta">
+                {% if guide.author %}<span>By {{ guide.author.username }}</span>{% endif %}
+                <span>{{ guide.published_at|date:"M j, Y" }}</span>
+                <span>{{ guide.reading_time }} min read</span>
+                <span>{{ guide.read_count }} reads</span>
+            </div>
+            {% if guide.destination %}
+            <a href="{{ guide.destination.get_absolute_url }}" class="guide-dest-link">
+                {{ guide.destination.emoji_icon }} {{ guide.destination.name }}
+                <span class="risk-badge risk-{{ guide.destination.risk_level }}">{{ guide.destination.get_risk_level_display|upper }}</span>
+            </a>
+            {% endif %}
+        </header>
+
+        <div class="guide-detail-body prose">
+            {{ guide.body|linebreaks }}
+        </div>
+
+        {% if related_guides %}
+        <div class="related-section">
+            <h2>Related Guides</h2>
+            {% for rg in related_guides %}
+            <a href="{{ rg.get_absolute_url }}" class="guide-row">
+                <div>
+                    <h3 class="guide-row-title">{{ rg.title }}</h3>
+                </div>
+                <span class="guide-reads">{{ rg.read_count }} reads</span>
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</article>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base/base.html' %}
+{% block title %}New Discussion{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container container-narrow">
+        <a href="{% url 'forum_home' %}" class="back-link">← Community</a>
+        <h1 class="section-title">Start a Discussion</h1>
+        <form method="post" class="edge-form">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% for error in field.errors %}<p class="form-error">{{ error }}</p>{% endfor %}
+            </div>
+            {% endfor %}
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-lg">Post Discussion</button>
+                <a href="{% url 'forum_home' %}" class="btn btn-ghost">Cancel</a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

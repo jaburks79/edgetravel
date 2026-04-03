@@ -1,0 +1,14 @@
+"""
+Add whitenoise to settings.py MIDDLEWARE for production static file serving.
+This file patches the settings — import it at the end of settings.py if needed.
+"""
+# In settings.py, add 'whitenoise.middleware.WhiteNoiseMiddleware' after SecurityMiddleware:
+#
+# MIDDLEWARE = [
+#     'django.middleware.security.SecurityMiddleware',
+#     'whitenoise.middleware.WhiteNoiseMiddleware',    # <-- add this line
+#     ...
+# ]
+#
+# And add this to the bottom of settings.py:
+# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'

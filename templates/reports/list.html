@@ -1,0 +1,41 @@
+{% extends 'base/base.html' %}
+{% block title %}Trip Reports{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="section-header">
+            <h1 class="section-title">Trip Reports</h1>
+            <a href="{% url 'submit_report' %}" class="btn btn-primary">+ Submit Report</a>
+        </div>
+        <div class="sort-bar">
+            <a href="?sort=newest" class="sort-link {% if current_sort == 'newest' %}active{% endif %}">Newest</a>
+            <a href="?sort=top" class="sort-link {% if current_sort == 'top' %}active{% endif %}">Top Voted</a>
+            <a href="?sort=featured" class="sort-link {% if current_sort == 'featured' %}active{% endif %}">Featured</a>
+        </div>
+        {% if reports %}
+            {% for report in reports %}
+            <a href="{{ report.get_absolute_url }}" class="report-row">
+                <div class="report-row-main">
+                    {% if report.is_featured %}<span class="featured-badge">★ FEATURED</span>{% endif %}
+                    <h3 class="report-row-title">{{ report.title }}</h3>
+                    <div class="report-row-meta">
+                        <span class="report-author">@{{ report.display_author }}</span>
+                        <span class="report-dest">{{ report.destination.name }}</span>
+                        <span class="report-style">{{ report.get_travel_style_display }}</span>
+                        {% if report.trip_duration %}<span class="report-days">{{ report.trip_duration }} days</span>{% endif %}
+                        <span class="report-date">{{ report.created_at|date:"M j, Y" }}</span>
+                    </div>
+                </div>
+                <div class="report-row-stats">
+                    <div class="stat"><div class="stat-value">▲ {{ report.upvotes }}</div><div class="stat-label">upvotes</div></div>
+                    <div class="stat"><div class="stat-value">{{ report.comment_count }}</div><div class="stat-label">replies</div></div>
+                </div>
+            </a>
+            {% endfor %}
+            {% include 'base/pagination.html' %}
+        {% else %}
+            <p class="empty-state">No trip reports yet. <a href="{% url 'submit_report' %}">Be the first to share your experience.</a></p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
