@@ -50,7 +50,7 @@ class Command(BaseCommand):
             self.stdout.write(f"  {'Created' if created else 'Exists'}: {name}")
 
 
-ffrom accounts.models import User
+from accounts.models import User
         admin_user = User.objects.filter(username='admin').first()
         if admin_user:
             admin_user.set_password('EdgeTravel2026!')
