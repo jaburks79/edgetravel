@@ -50,12 +50,17 @@ class Command(BaseCommand):
             self.stdout.write(f"  {'Created' if created else 'Exists'}: {name}")
 
 
-from accounts.models import User
-        if not User.objects.filter(is_superuser=True).exists():
+ffrom accounts.models import User
+        admin_user = User.objects.filter(username='admin').first()
+        if admin_user:
+            admin_user.set_password('EdgeTravel2026!')
+            admin_user.is_superuser = True
+            admin_user.is_staff = True
+            admin_user.save()
+            self.stdout.write("  Reset admin password")
+        else:
             User.objects.create_superuser('admin', 'admin@edgetravel.com', 'EdgeTravel2026!')
             self.stdout.write("  Created admin user")
-        else:
-            self.stdout.write("  Admin user already exists")
 
             
         self.stdout.write(self.style.SUCCESS("\nSeed data complete!"))
