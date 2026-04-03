@@ -1,1 +1,1 @@
-web: gunicorn edgetravel.wsgi --bind 0.0.0.0:$PORT
+web: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && python manage.py seed && gunicorn edgetravel.wsgi --bind 0.0.0.0:\$PORT"
