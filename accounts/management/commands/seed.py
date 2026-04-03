@@ -49,8 +49,7 @@ class Command(BaseCommand):
             obj, created = ForumCategory.objects.get_or_create(slug=slug, defaults={"name": name, "description": desc, "order": order})
             self.stdout.write(f"  {'Created' if created else 'Exists'}: {name}")
 
-
-from accounts.models import User
+        from accounts.models import User
         admin_user = User.objects.filter(username='admin').first()
         if admin_user:
             admin_user.set_password('EdgeTravel2026!')
@@ -62,7 +61,4 @@ from accounts.models import User
             User.objects.create_superuser('admin', 'admin@edgetravel.com', 'EdgeTravel2026!')
             self.stdout.write("  Created admin user")
 
-            
         self.stdout.write(self.style.SUCCESS("\nSeed data complete!"))
-
-
