@@ -5,7 +5,7 @@ from django.db.models import F
 from django.utils import timezone
 from django.contrib import messages
 from .models import ForumCategory, ForumPost, ForumReply
-from .forms import ForumPostForm, ForumReplyForm
+from .forms import ForumPostForm, ForumReplyForm, FeedbackForm
 
 
 class ForumHomeView(ListView):
@@ -101,3 +101,14 @@ def add_reply(request, slug):
             post.save(update_fields=['reply_count', 'last_reply_at', 'is_hot'])
             messages.success(request, 'Reply posted.')
     return redirect('forum_post_detail', slug=slug)
+
+def submit_feedback(request):
+    if request.method == 'POST':
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Thank you for your feedback! We will review it shortly.')
+            return redirect('home')
+    else:
+        form = FeedbackForm()
+    return render(request, 'forum/feedback.html', {'form': form})

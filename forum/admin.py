@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ForumCategory, ForumPost, ForumReply
+from .models import ForumCategory, ForumPost, ForumReply, Feedback
 
 
 @admin.register(ForumCategory)
@@ -35,3 +35,10 @@ class ForumReplyAdmin(admin.ModelAdmin):
     list_display = ['post', 'author', 'is_approved', 'created_at']
     list_filter = ['is_approved']
     list_editable = ['is_approved']
+
+@admin.register(Feedback)
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ['subject', 'name', 'email', 'is_read', 'created_at']
+    list_filter = ['is_read']
+    list_editable = ['is_read']
+    readonly_fields = ['name', 'email', 'subject', 'message', 'created_at']

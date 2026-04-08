@@ -1,0 +1,21 @@
+{% extends 'base/base.html' %}
+{% block title %}Feedback{% endblock %}
+{% block content %}
+<section class="section">
+    <div class="container container-tight">
+        <h1 class="section-title center">Send Us Feedback</h1>
+        <p class="section-subtitle center">Found a bug? Have a suggestion? Want to see a destination added? We'd love to hear from you.</p>
+        <form method="post" class="edge-form">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% for error in field.errors %}<p class="form-error">{{ error }}</p>{% endfor %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Send Feedback</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

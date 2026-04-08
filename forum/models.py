@@ -105,3 +105,19 @@ class ForumReply(models.Model):
         if self.post_anonymously:
             return "Anonymous Traveler"
         return self.author.username
+
+class Feedback(models.Model):
+    """User feedback and suggestions."""
+    name = models.CharField(max_length=100, blank=True)
+    email = models.EmailField(blank=True)
+    subject = models.CharField(max_length=200)
+    message = models.TextField(max_length=5000)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'edgetravel_feedback'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.subject} — {self.name or 'Anonymous'}"
