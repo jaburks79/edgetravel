@@ -296,3 +296,36 @@ img { max-width: 100%; display: block; }
     .filter-form { flex-direction: column; }
     .filter-search, .filter-select { max-width: 100%; }
 }
+
+/* Beta Badge */
+.beta-badge {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: #f97316;
+    background: #3a2520;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-left: 8px;
+    vertical-align: middle;
+    font-family: monospace;
+}
+
+/* Footer Feedback */
+.footer-bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.feedback-link {
+    font-size: 12px;
+    color: #f97316;
+    transition: color 0.2s;
+}
+
+.feedback-link:hover {
+    color: #fb923c;
+}

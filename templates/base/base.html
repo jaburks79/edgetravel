@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}EdgeTravel{% endblock %} — Real Intel for High-Risk Destinations</title>
     <meta name="description" content="{% block meta_description %}Trip reports, safety guides, and a community for travelers who go where others won't.{% endblock %}">
+    <meta name="google-site-verification" content="PASTE_YOUR_CODE_HERE" />
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     {% block extra_css %}{% endblock %}
@@ -15,6 +16,7 @@
             <a href="{% url 'home' %}" class="logo">
                 <span class="logo-icon">⚠</span>
                 <span class="logo-text">EDGE<span class="logo-accent">TRAVEL</span></span>
+                <span class="beta-badge">BETA</span>
             </a>
             <nav class="main-nav">
                 <a href="{% url 'destination_list' %}" class="nav-link {% if request.resolver_match.url_name == 'destination_list' %}active{% endif %}">Destinations</a>
@@ -61,7 +63,10 @@
             </div>
         </div>
         <div class="container footer-bottom">
-            <span>© 2026 EdgeTravel. All rights reserved.</span>
+            <div class="footer-bottom-row">
+                <span>&copy; 2026 EdgeTravel. All rights reserved.</span>
+                <a href="mailto:jaburks79@gmail.com" class="feedback-link">Have feedback or suggestions? Let us know</a>
+            </div>
         </div>
     </footer>
 
