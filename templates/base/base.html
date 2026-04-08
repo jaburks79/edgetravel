@@ -27,7 +27,7 @@
             <div class="header-actions">
                 {% if user.is_authenticated %}
                     <a href="{% url 'profile' username=user.username %}" class="btn btn-ghost">{{ user.username }}</a>
-                    <a href="{% url 'logout' %}" class="btn btn-ghost">Log Out</a>
+                    <form method="post" action="{% url 'logout' %}" style="display:inline;">{% csrf_token %}<button type="submit" class="btn btn-ghost">Log Out</button></form>
                 {% else %}
                     <a href="{% url 'login' %}" class="btn btn-ghost">Log In</a>
                     <a href="{% url 'register' %}" class="btn btn-primary">Join Free</a>
